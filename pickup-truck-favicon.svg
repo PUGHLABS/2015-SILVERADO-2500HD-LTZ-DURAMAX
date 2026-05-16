@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 64 64"
+   width="64"
+   height="64"
+   version="1.1"
+   id="svg13"
+   sodipodi:docname="pickup-truck-favicon.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs13" />
+  <sodipodi:namedview
+     id="namedview13"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="28.359375"
+     inkscape:cx="32"
+     inkscape:cy="37.641873"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="3061"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg13" />
+  <!-- Front view pickup truck favicon -->
+  <!-- Cab / roof -->
+  <rect
+     x="10.912396"
+     y="4.3680439"
+     width="40.976311"
+     height="16.926722"
+     rx="2.9268792"
+     fill="#800000"
+     id="rect1"
+     style="stroke-width:1.33018" />
+  <!-- Windshield -->
+  <rect
+     x="12.819283"
+     y="6.0986228"
+     width="36.845177"
+     height="13.901378"
+     rx="1.6747808"
+     fill="#2a2a3a"
+     id="rect2"
+     style="stroke-width:1.60837" />
+  <!-- Main body / hood -->
+  <rect
+     x="6"
+     y="20"
+     width="52"
+     height="22"
+     rx="2"
+     fill="#800000"
+     id="rect3" />
+  <!-- Grille (dark recess) -->
+  <rect
+     x="24"
+     y="24"
+     width="16"
+     height="14"
+     fill="#3a0000"
+     id="rect4" />
+  <!-- Grille horizontal bars -->
+  <rect
+     x="24"
+     y="27"
+     width="16"
+     height="1.2"
+     fill="#800000"
+     id="rect5" />
+  <rect
+     x="24"
+     y="30"
+     width="16"
+     height="1.2"
+     fill="#800000"
+     id="rect6" />
+  <rect
+     x="24"
+     y="33"
+     width="16"
+     height="1.2"
+     fill="#800000"
+     id="rect7" />
+  <rect
+     x="24"
+     y="36"
+     width="16"
+     height="1.2"
+     fill="#800000"
+     id="rect8" />
+  <!-- Headlights -->
+  <rect
+     x="10"
+     y="25"
+     width="11"
+     height="7"
+     rx="1.5"
+     fill="#fff4d6"
+     id="rect9" />
+  <rect
+     x="43"
+     y="25"
+     width="11"
+     height="7"
+     rx="1.5"
+     fill="#fff4d6"
+     id="rect10" />
+  <!-- Bumper -->
+  <rect
+     x="4"
+     y="40"
+     width="56"
+     height="6"
+     rx="1.5"
+     fill="#600000"
+     id="rect11" />
+  <!-- Tires (front view — tread visible, not wheel face) -->
+  <rect
+     x="7"
+     y="46"
+     width="9"
+     height="16.641872"
+     rx="2"
+     fill="#1a1a1a"
+     id="rect12"
+     style="stroke-width:1.23" />
+  <rect
+     x="48"
+     y="46"
+     width="9"
+     height="16.606611"
+     rx="2"
+     fill="#1a1a1a"
+     id="rect13"
+     style="stroke-width:1.2287" />
+</svg>

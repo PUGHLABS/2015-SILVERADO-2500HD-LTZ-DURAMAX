@@ -1,0 +1,18 @@
+# Secrets
+.env
+
+# Dependencies
+node_modules/
+
+# PDFs — too large / personal docs not for public repo
+*.pdf
+DURAMAX REPAIR MANUAL/
+
+# Service manual text — 18MB, re-generate with pdftotext
+extracted/service_manual.txt
+
+# Large media not used in site
+*.mp4
+
+# Editor
+.vscode/

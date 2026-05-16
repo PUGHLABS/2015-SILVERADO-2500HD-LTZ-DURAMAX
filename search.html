@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Repair Manual — 2015 Silverado 2500HD LTZ</title>
+  <link rel="icon" type="image/svg+xml" href="pickup-truck-favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Settings panel ── */
+    .settings-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .settings-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .settings-toggle:hover { border-color: var(--accent); color: var(--text); }
+    .settings-toggle.active { border-color: var(--accent); color: var(--accent2); background: var(--bg2); }
+    [data-theme="light"] .settings-toggle.active { color: var(--accent); }
+
+    .key-status {
+      font-size: 0.78rem;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .key-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border2);
+      flex-shrink: 0;
+    }
+    .key-dot.ok { background: var(--green); }
+
+    .settings-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      display: none;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .settings-panel.open { display: flex; }
+
+    .settings-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 220px;
+    }
+    .settings-field label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text2);
+    }
+    .settings-field input,
+    .settings-field select {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .settings-field input:focus,
+    .settings-field select:focus { border-color: var(--accent); }
+    .settings-field select option { background: var(--surface); }
+
+    .settings-save {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+      align-self: flex-end;
+    }
+    .settings-save:hover { background: var(--accent2); }
+
+    .settings-clear {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text2);
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      align-self: flex-end;
+    }
+    .settings-clear:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── Document checkboxes ── */
+    .docs-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 10px;
+    }
+    .doc-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .doc-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      user-select: none;
+    }
+    .doc-item:hover { border-color: var(--border2); }
+    .doc-item.checked { border-color: var(--accent); background: var(--bg2); }
+
+    .doc-item input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+    .doc-info { flex: 1; }
+    .doc-name {
+      font-weight: 600;
+      font-size: 0.84rem;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .doc-meta {
+      font-size: 0.72rem;
+      color: var(--text2);
+      margin-top: 2px;
+    }
+    .doc-tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      border-radius: 8px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    .doc-tag.inline { background: var(--green-bg); color: var(--green); }
+    .doc-tag.search { background: var(--accent-glow); color: var(--accent2); }
+    [data-theme="light"] .doc-tag.search { color: var(--accent); }
+
+    /* ── Token usage hint ── */
+    .usage-hint {
+      font-size: 0.75rem;
+      color: var(--text2);
+      margin-top: 10px;
+      min-height: 1.2em;
+      font-family: monospace;
+    }
+    .usage-hint.ok { color: var(--green); }
+
+    /* ── Result ── */
+    .result-body {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text);
+      white-space: pre-wrap;
+      font-family: 'Barlow', sans-serif;
+    }
+    .result-body p  { margin-bottom: 10px; }
+    .result-body ul { padding-left: 20px; margin-bottom: 10px; }
+    .result-body li { margin-bottom: 4px; }
+    .result-body strong { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ NAVIGATION ═══════════ -->
+  <nav class="site-nav">
+    <div class="nav-brand">
+      <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M0 20 H32 L38 40 H62 L68 20 H100 V40 H68 L62 60 H38 L32 40 H0 Z" fill="#6B1A1F"/>
+        <path d="M6 24 H30 L36 44 H12 Z" fill="#FAFAF7" opacity="0.15"/>
+        <path d="M70 24 H94 L88 44 H64 Z" fill="#FAFAF7" opacity="0.15"/>
+      </svg>
+      <div class="nav-brand-text">
+        2015 Silverado
+        <span>2500HD LTZ &middot; Duramax</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Overview</a>
+      <a class="nav-link" href="gallery.html">Gallery</a>
+      <a class="nav-link" href="history.html">Service History</a>
+      <a class="nav-link" href="warranty.html">Warranty</a>
+      <a class="nav-link" href="search.html">Search Manual</a>
+    </div>
+    <div class="nav-controls">
+      <button class="theme-btn" onclick="toggleTheme()">&#9728; Light</button>
+      <button class="nav-hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <a class="nav-link" href="index.html">Overview</a>
+    <a class="nav-link" href="gallery.html">Gallery</a>
+    <a class="nav-link" href="history.html">Service History</a>
+    <a class="nav-link" href="warranty.html">Warranty</a>
+    <a class="nav-link" href="search.html">Search Manual</a>
+  </div>
+
+  <main class="page">
+    <div class="search-wrap">
+
+      <!-- Header + settings toggle -->
+      <div class="settings-bar">
+        <div>
+          <div class="search-intro">Search Documents</div>
+          <p class="search-sub" style="margin-bottom:0;">
+            Ask Claude anything about your Silverado — select which documents to include, then search.
+          </p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <div class="key-status">
+            <div class="key-dot" id="keyDot"></div>
+            <span id="keyStatusText">No API key</span>
+          </div>
+          <button class="settings-toggle" id="settingsToggle" onclick="toggleSettings()">
+            &#9881; Settings
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings panel -->
+      <div class="settings-panel" id="settingsPanel">
+        <div class="settings-field" style="min-width:300px;">
+          <label for="apiKeyInput">Anthropic API Key</label>
+          <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
+        </div>
+        <div class="settings-field" style="min-width:200px; max-width:280px;">
+          <label for="modelSelect">Claude Model</label>
+          <select id="modelSelect">
+            <option value="claude-opus-4-7">claude-opus-4-7 &mdash; Best</option>
+            <option value="claude-sonnet-4-6" selected>claude-sonnet-4-6 &mdash; Faster</option>
+            <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 &mdash; Cheapest</option>
+          </select>
+        </div>
+        <button class="settings-save" onclick="saveSettings()">Save</button>
+        <button class="settings-clear" onclick="clearKey()">Clear Key</button>
+      </div>
+
+      <!-- Document checkboxes -->
+      <div class="docs-label">Documents to Search</div>
+      <div class="doc-list">
+
+        <label class="doc-item" id="doc-carfax">
+          <input type="checkbox" id="cb-carfax" data-key="cb-carfax">
+          <div class="doc-info">
+            <div class="doc-name">
+              CARFAX Vehicle History
+              <span class="doc-tag inline">Inline</span>
+            </div>
+            <div class="doc-meta">20 records &bull; 2 owners &bull; 2014&ndash;2026 &bull; ~16 KB</div>
+          </div>
+        </label>
+
+        <label class="doc-item" id="doc-invoice">
+          <input type="checkbox" id="cb-invoice" data-key="cb-invoice">
+          <div class="doc-info">
+            <div class="doc-name">
+              Hurricane Diesel Invoice #13693
+              <span class="doc-tag inline">Inline</span>
+            </div>
+            <div class="doc-meta">Mar 6, 2026 &bull; $1,680.13 &bull; Oil, trans, diffs, fuel filter &bull; ~8 KB</div>
+          </div>
+        </label>
+
+        <label class="doc-item" id="doc-warranty">
+          <input type="checkbox" id="cb-warranty" data-key="cb-warranty">
+          <div class="doc-info">
+            <div class="doc-name">
+              Endurance EA Premier Warranty
+              <span class="doc-tag inline">Inline</span>
+            </div>
+            <div class="doc-meta">Contract EPPRE84484714 &bull; Expires Apr 2031 / 217K mi &bull; ~104 KB</div>
+          </div>
+        </label>
+
+        <label class="doc-item" id="doc-manual">
+          <input type="checkbox" id="cb-manual" data-key="cb-manual">
+          <div class="doc-info">
+            <div class="doc-name">
+              OEM Service Manual
+              <span class="doc-tag search">Smart Search</span>
+            </div>
+            <div class="doc-meta">2014&ndash;2016 Silverado 2500HD/3500HD &bull; 18 MB indexed &bull; keyword-matched excerpts</div>
+          </div>
+        </label>
+
+      </div>
+
+      <!-- Search box -->
+      <div class="search-box">
+        <input
+          class="search-input"
+          id="searchInput"
+          type="text"
+          placeholder="e.g. fuel filter torque spec, Allison fluid capacity, injection pump bleed..."
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button class="search-btn" id="searchBtn" onclick="doSearch()">Search</button>
+      </div>
+
+      <!-- Suggested queries -->
+      <div class="search-chips" style="margin-top:12px;">
+        <div class="search-chip" onclick="setQuery('What engine oil type and capacity does the Duramax 6.6L require?')">Oil spec &amp; capacity</div>
+        <div class="search-chip" onclick="setQuery('Allison 1000 transmission fluid capacity and type')">Trans fluid capacity</div>
+        <div class="search-chip" onclick="setQuery('Fuel filter replacement procedure and torque specs')">Fuel filter torque</div>
+        <div class="search-chip" onclick="setQuery('Front differential fluid type and capacity 4WD')">Front diff fluid</div>
+        <div class="search-chip" onclick="setQuery('Transfer case fluid type NV263 capacity and procedure')">Transfer case service</div>
+        <div class="search-chip" onclick="setQuery('What does my Endurance warranty cover and what is excluded?')">Warranty coverage</div>
+        <div class="search-chip" onclick="setQuery('Show me the full service history from the Carfax report')">Full service history</div>
+        <div class="search-chip" onclick="setQuery('Glow plug replacement torque spec and procedure')">Glow plugs</div>
+        <div class="search-chip" onclick="setQuery('Upper control arm torque specs Z71 front suspension')">Control arm torque</div>
+        <div class="search-chip" onclick="setQuery('When is my next brake fluid service due based on history?')">Brake fluid due?</div>
+      </div>
+
+      <!-- Usage hint -->
+      <div class="usage-hint" id="usageHint"></div>
+
+      <!-- Result -->
+      <div class="search-result mt-16" id="resultBox">
+        <div class="result-source" id="resultSource"></div>
+        <div class="result-body" id="resultBody"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="nav.js"></script>
+  <script>
+  'use strict';
+
+  /* ── Constants ── */
+  const LS_KEY    = 'silverado-apiKey';
+  const LS_MODEL  = 'silverado-model';
+  const API_URL   = 'https://api.anthropic.com/v1/messages';
+  const DOC_FILES = {
+    carfax:  'extracted/carfax.txt',
+    invoice: 'extracted/hurricane_13693.txt',
+    warranty:'extracted/warranty.txt',
+  };
+
+  /* ── DOM refs ── */
+  const $ = id => document.getElementById(id);
+  const searchInput  = $('searchInput');
+  const searchBtn    = $('searchBtn');
+  const resultBox    = $('resultBox');
+  const resultSource = $('resultSource');
+  const resultBody   = $('resultBody');
+  const usageHint    = $('usageHint');
+  const keyDot       = $('keyDot');
+  const keyStatusTxt = $('keyStatusText');
+
+  /* ── Init: restore settings & checkbox states ── */
+  function init() {
+    const key   = localStorage.getItem(LS_KEY)   || '';
+    const model = localStorage.getItem(LS_MODEL) || 'claude-sonnet-4-6';
+    $('apiKeyInput').value = key;
+    $('modelSelect').value = model;
+    updateKeyStatus(key);
+
+    ['carfax','invoice','warranty','manual'].forEach(id => {
+      const cb = $('cb-' + id);
+      cb.checked = localStorage.getItem('cb-' + id) !== '0'; // default on
+      syncDocStyle(id);
+      cb.addEventListener('change', () => {
+        localStorage.setItem('cb-' + id, cb.checked ? '1' : '0');
+        syncDocStyle(id);
+      });
+    });
+  }
+
+  function syncDocStyle(id) {
+    const item = $('doc-' + id);
+    const cb   = $('cb-'  + id);
+    item.classList.toggle('checked', cb.checked);
+  }
+
+  /* ── Settings ── */
+  function toggleSettings() {
+    const panel  = $('settingsPanel');
+    const toggle = $('settingsToggle');
+    const open   = panel.classList.toggle('open');
+    toggle.classList.toggle('active', open);
+    if (open) $('apiKeyInput').focus();
+  }
+
+  function saveSettings() {
+    const key   = $('apiKeyInput').value.trim();
+    const model = $('modelSelect').value;
+    if (key) localStorage.setItem(LS_KEY, key); else localStorage.removeItem(LS_KEY);
+    localStorage.setItem(LS_MODEL, model);
+    updateKeyStatus(key);
+    $('settingsPanel').classList.remove('open');
+    $('settingsToggle').classList.remove('active');
+  }
+
+  function clearKey() {
+    localStorage.removeItem(LS_KEY);
+    $('apiKeyInput').value = '';
+    updateKeyStatus('');
+  }
+
+  function updateKeyStatus(key) {
+    const has = key && key.startsWith('sk-');
+    keyDot.className = 'key-dot' + (has ? ' ok' : '');
+    keyStatusTxt.textContent = has
+      ? `Key set — ${localStorage.getItem(LS_MODEL) || 'claude-sonnet-4-6'}`
+      : 'No API key';
+  }
+
+  /* ── Fetch a text file, return string ── */
+  const docCache = {};
+  async function fetchDoc(url) {
+    if (docCache[url]) return docCache[url];
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(`Could not load ${url} (${r.status})`);
+    const text = await r.text();
+    docCache[url] = text;
+    return text;
+  }
+
+  /* ── Get manual chunks from server ── */
+  async function fetchManualChunks(query) {
+    const r = await fetch(`/api/chunks?q=${encodeURIComponent(query)}`);
+    if (!r.ok) throw new Error(`/api/chunks ${r.status}`);
+    const { chunks } = await r.json();
+    return chunks;
+  }
+
+  /* ── Build system message blocks ── */
+  async function buildSystemBlocks(query) {
+    const blocks = [];
+
+    blocks.push({
+      type: 'text',
+      text:
+        'You are a certified diesel mechanic and service advisor specializing in the 2015 Chevrolet Silverado 2500HD LTZ with the 6.6L Duramax LB7 diesel engine and Allison 1000 automatic transmission.\n\n' +
+        'Vehicle: 2015 Chevrolet Silverado 2500HD LTZ Z71 — VIN 1GC2KWE87FZ103781 — 141,145 miles — Deep Cherry Red\n' +
+        'Owner: Jeff Pugh, Spokane WA\n\n' +
+        'Answer questions based on the documents provided. Be precise: include torque specs, part numbers, fluid capacities, and intervals when available. ' +
+        'If a question is about warranty coverage, check the Endurance contract terms carefully.',
+    });
+
+    if ($('cb-carfax').checked) {
+      const text = await fetchDoc(DOC_FILES.carfax);
+      blocks.push({
+        type: 'text',
+        text: '=== CARFAX VEHICLE HISTORY REPORT ===\n\n' + text,
+        cache_control: { type: 'ephemeral' },
+      });
+    }
+
+    if ($('cb-invoice').checked) {
+      const text = await fetchDoc(DOC_FILES.invoice);
+      blocks.push({
+        type: 'text',
+        text: '=== HURRICANE DIESEL INVOICE #13693 (March 6, 2026) ===\n\n' + text,
+        cache_control: { type: 'ephemeral' },
+      });
+    }
+
+    if ($('cb-warranty').checked) {
+      const text = await fetchDoc(DOC_FILES.warranty);
+      blocks.push({
+        type: 'text',
+        text: '=== ENDURANCE EA PREMIER WARRANTY POLICY ===\n\n' + text,
+        cache_control: { type: 'ephemeral' },
+      });
+    }
+
+    if ($('cb-manual').checked) {
+      const chunks = await fetchManualChunks(query);
+      if (chunks.length > 0) {
+        blocks.push({
+          type: 'text',
+          text: '=== OEM SERVICE MANUAL EXCERPTS (keyword-matched) ===\n\n' + chunks.join('\n\n---\n\n'),
+          cache_control: { type: 'ephemeral' },
+        });
+      }
+    }
+
+    return blocks;
+  }
+
+  /* ── Main search ── */
+  function setQuery(text) {
+    searchInput.value = text;
+    searchInput.focus();
+  }
+
+  async function doSearch() {
+    const query = searchInput.value.trim();
+    if (!query) return;
+
+    const key   = localStorage.getItem(LS_KEY);
+    const model = localStorage.getItem(LS_MODEL) || 'claude-sonnet-4-6';
+
+    if (!key || !key.startsWith('sk-')) {
+      resultBox.classList.add('visible');
+      resultSource.textContent = 'API key required';
+      resultBody.textContent   = 'Open ⚙ Settings above and paste your Anthropic API key (sk-ant-...).';
+      resultBody.className = 'result-body result-error';
+      return;
+    }
+
+    const anyChecked = ['carfax','invoice','warranty','manual'].some(id => $('cb-'+id).checked);
+    if (!anyChecked) {
+      resultBox.classList.add('visible');
+      resultSource.textContent = 'No documents selected';
+      resultBody.textContent   = 'Check at least one document above to include in the search.';
+      resultBody.className = 'result-body result-error';
+      return;
+    }
+
+    searchBtn.disabled = true;
+    searchInput.classList.add('loading');
+    resultBox.classList.add('visible');
+    resultSource.textContent = 'Loading documents…';
+    resultBody.textContent   = '';
+    resultBody.className     = 'result-body';
+    usageHint.textContent    = '';
+    usageHint.className      = 'usage-hint';
+
+    try {
+      const systemBlocks = await buildSystemBlocks(query);
+      resultSource.textContent = `Asking ${model}…`;
+
+      const body = {
+        model,
+        max_tokens: 2048,
+        system: systemBlocks,
+        messages: [{ role: 'user', content: query }],
+      };
+
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'x-api-key':                             key,
+          'anthropic-version':                     '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+          'content-type':                          'application/json',
+          'anthropic-beta':                        'prompt-caching-2024-07-31',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`HTTP ${res.status}: ${err}`);
+      }
+
+      const json  = await res.json();
+      const text  = (json.content || []).map(b => b.text || '').join('').trim();
+
+      const docs = ['carfax','invoice','warranty'].filter(id => $('cb-'+id).checked);
+      if ($('cb-manual').checked) docs.push('OEM Manual (excerpts)');
+
+      resultSource.textContent = docs.length
+        ? `Sources: ${docs.join(' · ')} — ${model}`
+        : model;
+
+      resultBody.textContent = text || '(empty response)';
+
+      /* Token usage */
+      const u = json.usage || {};
+      const parts = [
+        model,
+        `in ${(u.input_tokens ?? 0).toLocaleString()}t`,
+        `out ${(u.output_tokens ?? 0).toLocaleString()}t`,
+      ];
+      if (u.cache_read_input_tokens)    parts.push(`cache hit ${u.cache_read_input_tokens.toLocaleString()}t`);
+      if (u.cache_creation_input_tokens) parts.push(`cache primed ${u.cache_creation_input_tokens.toLocaleString()}t`);
+      usageHint.textContent = parts.join(' · ');
+      usageHint.className   = 'usage-hint ok';
+
+    } catch (err) {
+      resultSource.textContent = 'Error';
+      resultBody.textContent   = err.message;
+      resultBody.className     = 'result-body result-error';
+    } finally {
+      searchBtn.disabled = false;
+      searchInput.classList.remove('loading');
+    }
+  }
+
+  /* ── Keyboard shortcut ── */
+  searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+  /* ── Enter key saves settings ── */
+  $('apiKeyInput').addEventListener('keydown', e => { if (e.key === 'Enter') saveSettings(); });
+
+  init();
+  </script>
+</body>
+</html>
