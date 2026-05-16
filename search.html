@@ -485,12 +485,16 @@
     return text;
   }
 
-  /* ── Get manual chunks from server ── */
+  /* ── Get manual chunks from server (gracefully returns [] if server unavailable) ── */
   async function fetchManualChunks(query) {
-    const r = await fetch(`/api/chunks?q=${encodeURIComponent(query)}`);
-    if (!r.ok) throw new Error(`/api/chunks ${r.status}`);
-    const { chunks } = await r.json();
-    return chunks;
+    try {
+      const r = await fetch(`/api/chunks?q=${encodeURIComponent(query)}`);
+      if (!r.ok) return [];
+      const { chunks } = await r.json();
+      return chunks;
+    } catch {
+      return [];
+    }
   }
 
   /* ── Build system message blocks ── */
